@@ -48,3 +48,21 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
  1238  git push --set-upstream origin master
  1239  git push origin master --force
 ```
+```
+在Next.js应用中，从启动到呈现页面的大致流程如下：
+
+首先执行 next.config.mjs 文件，加载Next.js的配置。
+然后读取 .env 文件(如果存在)，加载环境变量。在这个项目中是 next-env.d.ts。
+执行 package.json 中定义的启动脚本，通常是 next dev 或 next start。
+Next.js初始化应用，加载全局样式 globals.css。
+路由系统开始工作，根据URL确定要渲染的页面。
+执行 layout.tsx 文件，它定义了应用的整体布局结构。
+根据路由加载并执行对应的 page.tsx 文件，这是实际页面内容。
+如果页面中使用了自定义组件（如 Category.tsx），这些组件会被加载和渲染。
+如果定义了数据获取函数（如getStaticProps或getServerSideProps），它们会在这个阶段执行。
+最后，完整的页面被渲染并发送到浏览器。
+客户端JavaScript开始执行，使页面具有交互性。
+在整个过程中，tailwind.config.ts 会被用于处理样式，tsconfig.json 用于TypeScript配置，.eslintrc.json 用于代码检查。
+
+favicon.ico 和 public 目录中的静态资源在需要时会被服务。
+```
