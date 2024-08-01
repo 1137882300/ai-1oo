@@ -34,3 +34,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+```
+ 1229  git remote add origin https://github.com/1137882300/ai-1oo.git
+ 1230  git remote -v
+ 1231  git push origin master --force
+ 1232  git init
+ 1233  git commit -m 'init'
+ 1234  git push
+ 1235  git push --set-upstream origin master
+ 1236  git remote add origin git@github.com:1137882300/ai-1oo.git
+ 1237  git remote set-url origin git@github.com:1137882300/ai-1oo.git
+ 1238  git push --set-upstream origin master
+ 1239  git push origin master --force
+```

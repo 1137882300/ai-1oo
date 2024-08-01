@@ -7,9 +7,9 @@ interface CategoryProps {
 }
 
 const Category: React.FC<CategoryProps> = ({ title, items }) => (
-    <div className="bg-pink-100 rounded-lg mb-5 text-left shadow-md">
-        <h2 className="bg-pink-100 text-gray-800 p-4 rounded-t-lg flex justify-between items-center">
-            {title} <span className="count bg-pink-200 text-gray-800 py-1 px-3 rounded-full">{items.length}</span>
+    <div className="bg-yellow-50 rounded-lg mb-5 text-left shadow-md">
+        <h2 className="bg-green-100 text-gray-800 p-4 rounded-t-lg flex justify-between items-center">
+            {title} <span className="count bg-green-200 text-gray-800 py-1 px-3 rounded-full">{items.length}</span>
         </h2>
         <ul className="bg-white rounded-b-lg max-h-64 overflow-y-auto">
             {items.map((item, index) => (
