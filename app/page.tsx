@@ -7,7 +7,7 @@ import categoriesData from './data/categories.json';
 
 export default function Home() {
 
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<any[]>([]);
 
     useEffect(() => {
         setCategories(categoriesData.categories);
