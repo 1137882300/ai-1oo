@@ -1,48 +1,17 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Category from './components/Category';
+import categoriesData from './data/categories.json';
+
 
 export default function Home() {
-    const [categories, setCategories] = useState([
-        {
-            title: '🤖 Chatbots',
-            items: [
-                { name: 'ChatGPT', link: 'https://chat.openai.com/' },
-                { name: 'Gemini', link: 'https://gemini.google.com/' },
-                { name: '通义千问', link: 'https://tongyi.aliyun.com/qianwen/' },
-                { name: '腾讯元宝', link: 'https://yuanbao.tencent.com/' },
-                { name: 'Claude', link: 'https://claude.ai/' },
-                { name: 'HuggingChat', link: 'https://huggingface.co/chat/' },
-                { name: '文心一言', link: 'https://yiyan.baidu.com/' },
-                { name: 'Kimi', link: '/kimi' }
-            ]
-        },
-        {
-            title: '🛠️ LLM App Development Frameworks',
-            items: [
-                { name: 'LangChain', link: 'https://www.langchain.com/' },
-                { name: 'Llama Index', link: 'https://www.llamaindex.ai/' }
-            ]
-        },
-        {
-            title: '💻 Hosting Local Models',
-            items: [
-                { name: 'Ollama', link: 'https://ollama.com/' },
-                { name: 'vLLM', link: 'https://vllm.ai/' },
-                { name: 'LM Studio', link: 'https://lmstudio.ai/' }
-            ]
-        },
-        {
-            title: '📚 LLM App Development Platforms',
-            items: [
-                { name: 'Dify', link: 'https://dify.ai/' },
-                { name: 'AnythingLLM', link: 'https://anythingllm.com/' },
-                { name: 'MaxKB', link: 'https://github.com/1Panel-dev/MaxKB' },
-                { name: 'Coze', link: 'https://www.coze.com/' },
-            ]
-        }
-    ]);
+
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        setCategories(categoriesData.categories);
+    }, []);
 
     return (
         <div className="container mx-auto px-4">
