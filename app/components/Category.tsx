@@ -1,9 +1,11 @@
 // app/components/Category.tsx
 import React from 'react';
+import Link from 'next/link';
+
 
 interface CategoryProps {
     title: string;
-    items: string[];
+    items: { name: string, link: string }[];
 }
 
 const Category: React.FC<CategoryProps> = ({ title, items }) => (
@@ -14,11 +16,15 @@ const Category: React.FC<CategoryProps> = ({ title, items }) => (
         <ul className="bg-white rounded-b-lg max-h-64 overflow-y-auto">
             {items.map((item, index) => (
                 <li key={index} className="border-t border-gray-200 p-4 flex justify-between items-center hover:bg-gray-100">
-                    {item} <span className="arrow text-gray-400 text-xl">→</span>
+                    <a href={item.link} className="flex justify-between items-center w-full" target="_blank" rel="noopener noreferrer">
+                        <span className="flex-grow">{item.name}</span>
+                        <span className="arrow text-gray-400 text-xl">→</span>
+                    </a>
                 </li>
             ))}
         </ul>
     </div>
 );
+
 
 export default Category;

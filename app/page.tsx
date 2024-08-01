@@ -7,19 +7,40 @@ export default function Home() {
     const [categories, setCategories] = useState([
         {
             title: '🤖 Chatbots',
-            items: ['ChatGPT', 'Bard', '通义千问', '腾讯元宝', 'Claude', 'HuggingChat', '文心一言']
+            items: [
+                { name: 'ChatGPT', link: 'https://chat.openai.com/' },
+                { name: 'Gemini', link: 'https://gemini.google.com/' },
+                { name: '通义千问', link: 'https://tongyi.aliyun.com/qianwen/' },
+                { name: '腾讯元宝', link: 'https://yuanbao.tencent.com/' },
+                { name: 'Claude', link: 'https://claude.ai/' },
+                { name: 'HuggingChat', link: 'https://huggingface.co/chat/' },
+                { name: '文心一言', link: 'https://yiyan.baidu.com/' },
+                { name: 'Kimi', link: '/kimi' }
+            ]
         },
         {
             title: '🛠️ LLM App Development Frameworks',
-            items: ['LangChain', 'Llama Index']
+            items: [
+                { name: 'LangChain', link: 'https://www.langchain.com/' },
+                { name: 'Llama Index', link: 'https://www.llamaindex.ai/' }
+            ]
         },
         {
             title: '💻 Hosting Local Models',
-            items: ['Ollama', 'vLLM', 'LM Studio']
+            items: [
+                { name: 'Ollama', link: 'https://ollama.com/' },
+                { name: 'vLLM', link: 'https://vllm.ai/' },
+                { name: 'LM Studio', link: 'https://lmstudio.ai/' }
+            ]
         },
         {
             title: '📚 LLM App Development Platforms',
-            items: ['Dify', 'AnythingLLM', 'MaxKB', 'Coze', 'ChatOllama']
+            items: [
+                { name: 'Dify', link: 'https://dify.ai/' },
+                { name: 'AnythingLLM', link: 'https://anythingllm.com/' },
+                { name: 'MaxKB', link: 'https://github.com/1Panel-dev/MaxKB' },
+                { name: 'Coze', link: 'https://www.coze.com/' },
+            ]
         }
     ]);
 
