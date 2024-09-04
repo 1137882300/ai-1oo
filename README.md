@@ -35,6 +35,11 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+## 框架
+tailwindcss: https://tailwindcss.com/docs/size
+nest.js: https://nestjs.com/docs/
+react: https://react.dev/learn/start-a-new-react-project#nextjs-pages-router
+
 ```
  1229  git remote add origin https://github.com/1137882300/ai-1oo.git
  1230  git remote -v
