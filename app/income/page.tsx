@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -16,11 +16,7 @@ export default function IncomePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
 
-  useEffect(() => {
-    fetchIncomes();
-  }, []);
-
-  const fetchIncomes = async () => {
+  const fetchIncomes = useCallback(async () => {
     try {
       // 构建查询参数
       const params = new URLSearchParams();
@@ -45,7 +41,11 @@ export default function IncomePage() {
       // 可以在这里添加加载状态的处理
       // setIsLoading(false);
     }
-  };
+  }, [searchTerm]); // 添加 searchTerm 作为依赖项
+
+  useEffect(() => {
+    fetchIncomes();
+  }, [fetchIncomes]);
 
   const filteredIncomes = incomes.filter(income =>
     income.description

@@ -27,14 +27,12 @@ export default function ClaudeArtifactsPage() {
         <div className="bg-pink-50 rounded-lg p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {artifacts.map((artifact, index) => (
-              <Link href={artifact.link} target="_blank" rel="noopener noreferrer" className="block">
                 <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
                   <img src={artifact.image} alt={artifact.title} className="w-full h-48 object-cover" />
                   <div className="p-4">
                     <h3 className="text-lg font-semibold">{artifact.title}</h3>
                   </div>
                 </div>
-              </Link>
             ))}
           </div>
         </div>
