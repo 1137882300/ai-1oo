@@ -1,27 +1,21 @@
-"use client";
-
-import React, { useState, useEffect } from 'react';
+import { categories } from '@/data/categories';
 import Category from './components/Category';
-import categoriesData from './data/categories.json';
-
+import NewlyAdded from './components/NewlyAdded'; 
 
 export default function Home() {
-
-    const [categories, setCategories] = useState<any[]>([]);
-
-    useEffect(() => {
-        setCategories(categoriesData.categories);
-    }, []);
-
-    return (
-        <div className="container mx-auto px-4">
-            <h1 className="text-4xl font-bold text-center my-8">AI-1oo</h1>
-            <p className="text-xl text-center mb-8">Keep discovering the best AI products and projects</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {categories.map((category, index) => (
-                    <Category key={index} title={category.title} items={category.items} />
-                ))}
-            </div>
-        </div>
-    );
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="py-8">
+        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">Keep discovering the best in AI</h1>
+        
+        {/* 添加 Newly Added 部分 */}
+        <NewlyAdded />
+        
+        {/* 现有的类别列表 */}
+        {categories.map((category, index) => (
+          <Category key={index} {...category} />
+        ))}
+      </main>
+    </div>
+  )
 }

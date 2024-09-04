@@ -13,6 +13,9 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        'custom-purple': '#83d69f', // 调整这个颜色值以匹配设计
+      },
     },
   },
   plugins: [],

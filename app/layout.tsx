@@ -1,24 +1,30 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { Analytics } from "@vercel/analytics/react"
+import './globals.css'
+import type { Metadata } from 'next'
+import Header from './components/Header'
 
-
-const inter = Inter({ subsets: ["latin"] });
+const navItems = [
+  { name: 'Home', href: '/' },
+  { name: 'Claude Artifacts', href: '/claude-artifacts' },
+  { name: 'GPUs', href: '/gpus' },
+  { name: 'Books', href: '/books' },
+];
 
 export const metadata: Metadata = {
-  title: "AI-1oo",
-  description: "Keep discovering the best AI products and projects",
-};
+  title: '100.AI - Keep discovering the best in AI',
+  description: 'Discover the best AI tools and resources',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children} <Analytics /> </body>
+      <body>
+        <Header link="/" navItems={navItems} />
+        <main>{children}</main>
+      </body>
     </html>
-  );
+  )
 }
