@@ -3,6 +3,7 @@ import Link from 'next/link'
 interface NavItem {
   name: string;
   href: string;
+  isNew?: boolean;
 }
 
 interface HeaderProps {
@@ -25,9 +26,14 @@ const Header: React.FC<HeaderProps> = ({ link, navItems }) => {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-base font-medium text-gray-500 hover:text-gray-900"
+                className="text-base font-medium text-gray-500 hover:text-gray-900 relative"
               >
                 {item.name}
+                {item.isNew && (
+                  <span className="absolute -top-0.5 -right-4 bg-red-500 text-white text-[10px] font-medium px-1 py-0.5 rounded-full leading-none">
+                    New
+                  </span>
+                )}
               </Link>
             ))}
           </nav>

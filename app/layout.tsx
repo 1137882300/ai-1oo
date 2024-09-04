@@ -5,9 +5,9 @@ import Footer from './components/Footer';
 
 const navItems = [
   { name: 'Home', href: '/' },
-  { name: 'Claude Artifacts', href: '/claude-artifacts' },
+  { name: 'Claude Artifacts', href: '/claude-artifacts', isNew: true },
   { name: 'GPUs', href: '/gpus' },
-  { name: 'Books', href: '/books' },
+  { name: 'Books', href: '/books'  },
 ];
 
 export const metadata: Metadata = {
