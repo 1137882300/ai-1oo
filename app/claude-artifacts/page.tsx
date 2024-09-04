@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ClaudeArtifact } from '@/types'
+import Image from 'next/image'
 
 const artifacts: ClaudeArtifact[] = [
   { title: 'Enhanced BMI Calculator', image: '/images/bmi-calculator.png',link:'https://claude.site/artifacts/6fd95417-f0cd-4f4c-b9a2-a31a80982ca9'},
@@ -28,7 +29,14 @@ export default function ClaudeArtifactsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {artifacts.map((artifact, index) => (
                 <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <img src={artifact.image} alt={artifact.title} className="w-full h-48 object-cover" />
+                  <Image 
+                    src={artifact.image} 
+                    alt={artifact.title} 
+                    width={500}  // 设置适当的宽度
+                    height={300}  // 设置适当的高度
+                    layout="responsive"
+                    className="w-full h-48 object-cover"
+                  />
                   <div className="p-4">
                     <h3 className="text-lg font-semibold">{artifact.title}</h3>
                   </div>
