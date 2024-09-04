@@ -19,7 +19,7 @@ const Category: React.FC<CategoryType> = ({ title, icon, items }) => {
           <span className="mr-2">{icon}</span>
           {title}
         </h2>
-        <span className="bg-pink-100 text-pink-600 text-sm px-2 py-0.5 rounded-full">
+        <span className="bg-green-100 text-indigo-500 text-sm px-2 py-0.5 rounded-full">
           {items.length}
         </span>
       </div>
