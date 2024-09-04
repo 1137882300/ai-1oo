@@ -11,19 +11,21 @@ const NewlyAddedCard: React.FC<{ item: NewlyAddedItem }> = ({ item }) => (
   </Link>
 );
 
-const NewlyAdded: React.FC = () => {
+const NewlyAdded = () => {
   return (
-    <section className="mb-8 bg-green-100 rounded-xl p-6 shadow-md">
-      <h2 className="text-2xl font-bold mb-4 flex items-center">
-        <span className="mr-2">✨</span>
-        Newly Added
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {newlyAddedItems.map((item, index) => (
-          <NewlyAddedCard key={index} item={item} />
-        ))}
-      </div>
-    </section>
+    <div className="hidden md:block mb-8"> {/* 添加 hidden md:block */}
+      <section className="mb-8 bg-green-100 rounded-xl p-6 shadow-md">
+        <h2 className="text-2xl font-bold mb-4 flex items-center">
+          <span className="mr-2">✨</span>
+          Newly Added
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {newlyAddedItems.map((item, index) => (
+            <NewlyAddedCard key={index} item={item} />
+          ))}
+        </div>
+      </section>
+    </div>
   );
 };
 
