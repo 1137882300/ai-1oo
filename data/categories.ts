@@ -38,7 +38,7 @@ export const categories: Category[] = [
       { name: "ChatGPT", link: "https://chat.openai.com/" },
       { name: "Microsoft Copilot", link: "https://copilot.microsoft.com/" },
       { name: "Claude", link: "https://www.anthropic.com/" },
-      { name: "Bard", link: "https://bard.google.com/" },
+      { name: "Gemini", link: "https://gemini.google.com/" },
       { name: "HuggingChat", link: "https://huggingface.co/chat/" },
       { name: "SpicyChat", link: "https://spicychat.ai/", isNew: true },
       { name: "Candy AI", link: "https://candy.ai/", isNew: true },
@@ -48,11 +48,47 @@ export const categories: Category[] = [
       { name: "Poe", link: "https://poe.com/", isNew: true },
       { name: "QuillBot", link: "https://quillbot.com/", isNew: true },
       { name: "通义千问", link: "https://tongyi.aliyun.com/" },
+      { name: "Coze", link: "https://www.coze.cn/" },
       { name: "文心一言", link: "https://yiyan.baidu.com/" },
       { name: "Kimi", link: "https://kimi.moonshot.cn/" },
       { name: "腾讯混元", link: "https://hunyuan.tencent.com/" },
       { name: "智谱清言", link: "https://chatglm.cn/" },
       { name: "海螺AI", link: "https://www.hailuoai.com/" },
+      { name: "You", link: "https://you.com" },
+      { name: "Pop", link: "https://popai.pro" },
+      { name: "Perplexity",link: "https://www.perplexity.ai/" },
+      { name: "Deepseek",link: "https://www.deepseek.com/" },
+      { name: "Zhidouai",link: "https://www.zhidouai.com/" },
+      { name: "360AI",link: "https://bot.360.com" },
+      { name: "Dell-3",link: "https://www.bing.com/images/create" },
+    ]
+  },
+  {
+    title: "LLM App Development Platforms",
+    icon: "📚",
+    items: [
+        {"name":"Dify","link":"https://dify.ai/" },
+        {"name":"AnythingLLM","link":"https://anythingllm.com/" },
+        {"name":"MaxKB","link":"https://github.com/1Panel-dev/MaxKB" },
+        {"name":"Coze","link":"https://www.coze.com/" },
+    ]
+  }, 
+  {
+    title: "Hosting Local Models",
+    icon: "📚",
+    items: [
+        {"name":"Ollama","link":"https://ollama.com/" },
+        {"name":"vLLM","link":"https://vllm.ai/" },
+        {"name":"LM Studio","link":"https://lmstudio.ai/" },
+    ]
+  },
+  {
+    title: "LLM App Development Frameworks",
+    icon: "🛠️",
+    items: [
+        {"name":"LangChain","link":"https://www.langchain.com/" },
+        {"name":"Llama Index","link":"https://www.llamaindex.ai/" },
+        {"name":"Firecrawl","link":"https://www.firecrawl.dev/" },
     ]
   },
 ];
