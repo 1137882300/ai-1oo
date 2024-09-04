@@ -13,6 +13,7 @@ export interface Category {
 export interface ClaudeArtifact {
     title: string;
     image: string;
+    link: string;
   }
 
 export interface NewlyAddedItem {
