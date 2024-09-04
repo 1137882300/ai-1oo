@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const CategoryItem: React.FC<{ item: Item }> = ({ item }) => (
   <Link href={item.link} target="_blank" rel="noopener noreferrer" className="block">
-    <div className={`bg-gray-50 border border-gray-200 rounded p-2 text-center text-sm ${item.isNew ? 'bg-purple-100' : ''} hover:bg-gray-100 transition-colors`}>
+    <div className={`bg-gray-50 border border-gray-200 rounded p-2 text-center text-sm ${item.isNew ? 'bg-lime-200' : ''} hover:bg-emerald-400 transition-colors`}>
       {item.isNew && <span className="text-yellow-500 mr-1">✨</span>}
       {item.name}
     </div>

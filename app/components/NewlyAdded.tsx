@@ -13,7 +13,7 @@ const NewlyAddedCard: React.FC<{ item: NewlyAddedItem }> = ({ item }) => (
 
 const NewlyAdded: React.FC = () => {
   return (
-    <section className="mb-8 bg-purple-50 rounded-xl p-6 shadow-md">
+    <section className="mb-8 bg-green-100 rounded-xl p-6 shadow-md">
       <h2 className="text-2xl font-bold mb-4 flex items-center">
         <span className="mr-2">✨</span>
         Newly Added
