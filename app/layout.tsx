@@ -6,7 +6,7 @@ import Footer from './components/Footer';
 const navItems = [
   { name: 'Home', href: '/' },
   { name: 'Claude Artifacts', href: '/claude-artifacts', isNew: true },
-  { name: 'GPUs', href: '/gpus' },
+  { name: 'Income', href: '/income' },
   { name: 'Books', href: '/books'  },
 ];
 
@@ -22,9 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="flex flex-col min-h-screen">
         <Header link="/" navItems={navItems} />
-        <main>{children}</main>
+        <main className="flex-grow">{children}</main>
         <Footer />
       </body>
     </html>
