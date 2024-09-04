@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import Header from './components/Header'
+import Footer from './components/Footer';
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body>
         <Header link="/" navItems={navItems} />
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   )
