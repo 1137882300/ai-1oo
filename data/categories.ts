@@ -36,6 +36,7 @@ export const categories: Category[] = [
     icon: "🤖",
     items: [
       { name: "ChatGPT", link: "https://chat.openai.com/" , isNew: true},
+      { name: "V0dev",   link: "https://v0.dev/chat" , isNew: true},
       { name: "Microsoft Copilot", link: "https://copilot.microsoft.com/" },
       { name: "Claude", link: "https://www.anthropic.com/" , isNew: true},
       { name: "Gemini", link: "https://gemini.google.com/" },
@@ -146,7 +147,7 @@ export const categories: Category[] = [
 //NewlyAdded 
 export const newlyAddedItems: NewlyAddedItem[] = [ 
     { name: "LlamaIndex", category: "LLM Tools", link: "https://www.llamaindex.ai/" },
-    { name: "SpicyChat", category: "Chatbots", link: "https://spicychat.ai/" },
+    { name: "V0dev", category: "Chatbots", link: "https://v0.dev/chat" },
     { name: "Candy AI", category: "Chatbots", link: "https://candy.ai/" },
     { name: "CrushOn.AI", category: "Chatbots", link: "https://crushon.ai/" },
     { name: "character.ai", category: "Chatbots", link: "https://character.ai/" },

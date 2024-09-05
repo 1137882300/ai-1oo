@@ -1,16 +1,32 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/lib/dbConnect';
 import { ObjectId } from 'mongodb';
 
+// app/api/income/route.ts 处理 /api/income 的请求（如 GET 获取所有收入，POST 创建新收入）。
 // 获取所有收入记录
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
     const client = await clientPromise;
     const db = client.db("robus_database");
     const collection = db.collection("robus_collection");
 
-    const incomes = await collection.find({}).toArray();
-    return NextResponse.json(incomes);
+    // 构建查询条件
+    let query = {};
+    if (searchParams.has('startDate') && searchParams.has('endDate')) {
+      query = {
+        date: {
+          $gte: new Date(searchParams.get('startDate')!),
+          $lte: new Date(searchParams.get('endDate')!)
+        }
+      };
+    }
+
+    const incomes = await collection.find(query).toArray();
+    return NextResponse.json(incomes.map(income => ({
+      ...income,
+      id: income._id.toString() // 确保前端收到的是字符串形式的id
+    })));
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: '获取收入记录失败' }, { status: 500 });
