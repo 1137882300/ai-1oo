@@ -46,10 +46,15 @@ export default function IncomePage() {
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
+  //用于动态生成表格的列头或表单字段。
+  //useCallback 是一个 React 钩子，用于优化性能。它返回一个记忆化的回调函数。
   const getIncomeKeys = useCallback(() => {
+    //获取 columnDisplayNames 对象的所有键。
     return Object.keys(columnDisplayNames);
+    //空数组 [] 作为 useCallback 的依赖项列表，表示这个函数只会在组件首次渲染时创建，之后不会重新创建。
   }, []);
 
+  //useEffect 在组件渲染后执行。
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -64,6 +69,7 @@ export default function IncomePage() {
     };
 
     fetchData();
+    //当搜索词变化时重新获取数据。[searchTerm] 是依赖数组
   }, [searchTerm]);
 
   const handleDeleteIncome = async (id: string) => {
@@ -82,6 +88,7 @@ export default function IncomePage() {
     }
   };
 
+  //通过 useCallback 优化性能，避免在每次渲染时重新创建函数。
   const refreshIncomes = useCallback(async () => {
     try {
       const data = await fetchIncomes(searchTerm);
@@ -98,8 +105,12 @@ export default function IncomePage() {
       : false
   );
 
+  //这个函数 handleInputChange 用于处理表单输入的变化 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    //从事件目标中提取 name 和 value 属性。
     const { name, value } = e.target;
+    //保留之前的所有表单数据（...prev）
+    //更新变化的字段（[name]: value）
     setFormData(prev => ({ ...prev, [name]: value }));
     console.log(`Field ${name} updated to ${value}`);
   };
