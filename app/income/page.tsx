@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { fetchIncomes, deleteIncome, addIncome } from '../services/incomeService';
- 
+import Link from 'next/link';
+
 interface Income {
   _id: string;
   userId: string;
@@ -34,7 +35,8 @@ const columnDisplayNames: { [key: string]: string } = {
 // 静态用户列表
 const staticUsers: User[] = [
   { id: '1', name: '小黑' },
-  { id: '2', name: '小螃蟹' }
+  { id: '2', name: '小螃蟹' },
+  { id: '3', name: '测试' }
 ];
 
 export default function IncomePage() {
@@ -171,12 +173,19 @@ export default function IncomePage() {
             查询
           </button>
         </div>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out hover:bg-blue-600 active:bg-blue-700 active:transform active:scale-95"
-        >
-          添加数据
-        </button>
+        <div className="flex space-x-2">
+          <Link href="/income/statistics" passHref>
+            <button className="bg-purple-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out hover:bg-purple-600 active:bg-purple-700 active:transform active:scale-95">
+              统计
+            </button>
+          </Link>
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out hover:bg-blue-600 active:bg-blue-700 active:transform active:scale-95"
+          >
+            添加数据
+          </button>
+        </div>
       </div>
       <table className="w-full border-collapse border">
         <thead>

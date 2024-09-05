@@ -37,3 +37,19 @@ export async function deleteIncome(id: string): Promise<void> {
       throw new Error('添加收入失败');
     }
   }
+
+  // 获取收入统计数据
+  export async function fetchIncomeStatistics(timeFrame: string, selectedUser: string) {
+    try {
+      const response = await fetch(`/api/income?statistics=true&timeFrame=${timeFrame}&selectedUser=${selectedUser}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log('Fetched data:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching income statistics:', error);
+      throw new Error('获取收入统计数据失败');
+    }
+  }

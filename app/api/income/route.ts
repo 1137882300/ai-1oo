@@ -5,31 +5,58 @@ import { ObjectId } from 'mongodb';
 // app/api/income/route.ts 处理 /api/income 的请求（如 GET 获取所有收入，POST 创建新收入）。
 // 获取所有收入记录
 export async function GET(request: NextRequest) {
+  console.log('GET function called', new Date().toISOString());
   try {
     const { searchParams } = new URL(request.url);
+    const isStatistics = searchParams.get('statistics') === 'true';
     const client = await clientPromise;
     const db = client.db("robus_database");
     const collection = db.collection("robus_collection");
 
-    // 构建查询条件
-    let query = {};
-    if (searchParams.has('startDate') && searchParams.has('endDate')) {
-      query = {
-        date: {
-          $gte: new Date(searchParams.get('startDate')!),
-          $lte: new Date(searchParams.get('endDate')!)
-        }
-      };
+    if (isStatistics) {
+      const timeFrame = searchParams.get('timeFrame');
+      const selectedUser = searchParams.get('selectedUser');
+
+      console.log('Query params:', { timeFrame, selectedUser });
+
+      let query: any = {};
+      if (selectedUser && selectedUser !== 'all') {
+        query.userId = selectedUser;
+      }
+
+      if (timeFrame === 'week') {
+        query.date = { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] };
+      } else if (timeFrame === 'month') {
+        query.date = { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] };
+      } else if (timeFrame === 'year') {
+        query.date = { $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] };
+      }
+
+      console.log('MongoDB query:', JSON.stringify(query));
+
+      const statistics = await collection.aggregate([
+        { $match: query },
+        { $group: {
+          _id: "$date",
+          totalAmount: { $sum: "$amount" },
+          totalBonus: { $sum: "$bonus" },
+          totalTax: { $sum: "$personalIncomeTax" },
+          totalInsurance: { $sum: "$socialInsurance" }
+        }},
+        { $sort: { _id: 1 } }
+      ]).toArray();
+
+      console.log('Statistics result:', JSON.stringify(statistics));
+
+      return NextResponse.json(statistics);
     }
 
-    const incomes = await collection.find(query).toArray();
-    return NextResponse.json(incomes.map(income => ({
-      ...income,
-      id: income._id.toString() // 确保前端收到的是字符串形式的id
-    })));
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: '获取收入记录失败' }, { status: 500 });
+    // 处理其他 GET 请求（如获取收入列表）
+    // ...
+
+  } catch (error: unknown) {
+    console.error('Error in GET /api/income:', error);
+    return NextResponse.json({ error: '获取数据失败', details: (error as Error).message }, { status: 500 });
   }
 }
 
