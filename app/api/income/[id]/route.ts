@@ -17,7 +17,7 @@ export async function GET(
 
     const client = await clientPromise;
     const db = client.db("robus_database"); // 确保这是正确的数据库名称
-    const income = await db.collection('incomes').findOne({ _id: new ObjectId(params.id) });
+    const income = await db.collection('robus_collection').findOne({ _id: new ObjectId(params.id) });
     
     console.log('查询结果:', income);
 
