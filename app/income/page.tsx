@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { fetchIncomes, deleteIncome, addIncome } from '../services/incomeService';
-
+ 
 interface Income {
   _id: string;
   userId: string;
