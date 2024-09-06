@@ -60,3 +60,36 @@ export async function DELETE(
     return NextResponse.json({ error: '删除记录失败' }, { status: 500 });
   }
 }
+
+// 更新收入记录
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const client = await clientPromise;
+    const db = client.db("robus_database");
+    const collection = db.collection("robus_collection");
+
+    const { id } = params;
+    const updateData = await request.json();
+
+    // 确保从 updateData 中移除 _id 字段
+    const { _id, ...safeUpdateData } = updateData;
+
+    if (!ObjectId.isValid(id)) {
+      return NextResponse.json({ error: '无效的ID' }, { status: 400 });
+    }
+
+    const result = await collection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: safeUpdateData }
+    );
+
+    if (result.matchedCount === 0) {
+      return NextResponse.json({ error: '未找到该收入记录' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: '更新成功' });
+  } catch (error) {
+    console.error('更新收入记录时出错:', error);
+    return NextResponse.json({ error: '更新收入记录失败' }, { status: 500 });
+  }
+}

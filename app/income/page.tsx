@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { fetchIncomes, deleteIncome, addIncome } from '../services/incomeService';
+import { fetchIncomes, deleteIncome, addIncome, fetchIncomeById, updateIncome } from '../services/incomeService';
 import Link from 'next/link';
 
 interface Income {
@@ -50,6 +50,7 @@ export default function IncomePage() {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [editingIncomeId, setEditingIncomeId] = useState<string | null>(null);
   const pageSize = 3;
 
   const handleSearch = useCallback(async (page: number = 1) => {
@@ -109,12 +110,17 @@ export default function IncomePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await addIncome(formData);
-      await handleSearch();
+      if (editingIncomeId) {
+        await updateIncome(editingIncomeId, formData);
+      } else {
+        await addIncome(formData);
+      }
+      await handleSearch(currentPage);
       setIsModalOpen(false);
       setFormData({});
+      setEditingIncomeId(null);
     } catch (error) {
-      console.error('添加收入时出错:', error);
+      console.error('保存收入时出错:', error);
       // 这里可以添加错误处理逻辑，比如显示错误消息
     }
   };
@@ -133,6 +139,18 @@ export default function IncomePage() {
       const data = await response.json();
       setSelectedIncome(data);
       setIsDetailModalOpen(true);
+    } catch (error) {
+      console.error('获取收入详情时出错:', error);
+      // 这里可以添加错误处理逻辑，比如显示错误消息
+    }
+  };
+
+  const handleEditIncome = async (id: string) => {
+    try {
+      const incomeToEdit = await fetchIncomeById(id);
+      setFormData(incomeToEdit);
+      setIsModalOpen(true);
+      setEditingIncomeId(id);
     } catch (error) {
       console.error('获取收入详情时出错:', error);
       // 这里可以添加错误处理逻辑，比如显示错误消息
@@ -186,7 +204,7 @@ export default function IncomePage() {
           </Link>
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="bg-blue-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out hover:bg-blue-600 active:bg-blue-700 active:transform active:scale-95"
+            className="bg-blue-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out hover:bg-blue-600 active:bg-blue-700 active:transform active:scale-95 w-24 h-full"
           >
             添加数据
           </button>
@@ -216,18 +234,26 @@ export default function IncomePage() {
                     </td>
                   ))}
                   <td className="border p-2">
-                    <button
-                      onClick={() => handleViewDetails(income._id)}
-                      className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
-                    >
-                      查看详情
-                    </button>
-                    <button
-                      onClick={() => handleDeleteIncome(income._id)}
-                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
-                    >
-                      删除
-                    </button>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleViewDetails(income._id)}
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded text-sm"
+                      >
+                        查看
+                      </button>
+                      <button
+                        onClick={() => handleEditIncome(income._id)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded text-sm"
+                      >
+                        编辑
+                      </button>
+                      <button
+                        onClick={() => handleDeleteIncome(income._id)}
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded text-sm"
+                      >
+                        删除
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

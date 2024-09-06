@@ -21,3 +21,15 @@ export interface NewlyAddedItem {
     category: string;
     link: string;
 }
+
+export interface Income {
+  _id: string;
+  userId: string;
+  date: string;
+  amount: number;
+  note: string | null;
+  bonus: number;
+  personalIncomeTax: number;
+  socialInsurance: number;
+  [key: string]: any;
+}

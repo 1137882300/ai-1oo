@@ -1,3 +1,4 @@
+import { Income } from "@/types";
 // 删除收入记录
 export async function deleteIncome(id: string): Promise<void> {
   if (!id) {
@@ -63,5 +64,32 @@ export async function deleteIncome(id: string): Promise<void> {
     } catch (error) {
       console.error('Error fetching income statistics:', error);
       throw new Error('获取收入统计数据失败');
+    }
+  }
+
+  // 获取收入详情
+  export async function fetchIncomeById(id: string): Promise<Income> {
+    const response = await fetch(`/api/income/${id}`);
+    if (!response.ok) {
+      throw new Error('获取收入详情失败');
+    }
+    return response.json();
+  }
+
+  // 更新收入
+  export async function updateIncome(id: string, data: Partial<Income>): Promise<void> {
+    // 确保从 data 中移除 _id 字段
+    const { _id, ...updateData } = data;
+    
+    const response = await fetch(`/api/income/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateData),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || '更新收入失败');
     }
   }
