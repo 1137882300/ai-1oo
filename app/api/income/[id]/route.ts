@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/lib/dbConnect';
 import { ObjectId } from 'mongodb';
+import { DatabaseConfig } from '@/app/config/appConfig';
+
 
 // 添加 GET 方法处理
 export async function GET(
@@ -16,8 +18,8 @@ export async function GET(
     }
 
     const client = await clientPromise;
-    const db = client.db("robus_database"); // 确保这是正确的数据库名称
-    const income = await db.collection('robus_collection').findOne({ _id: new ObjectId(params.id) });
+    const db = client.db(DatabaseConfig.DATABASE_NAME); // 确保这是正确的数据库名称
+    const income = await db.collection(DatabaseConfig.COLLECTION_NAME).findOne({ _id: new ObjectId(params.id) });
     
     console.log('查询结果:', income);
 
@@ -45,8 +47,8 @@ export async function DELETE(
 
   try {
     const client = await clientPromise;
-    const db = client.db("robus_database");
-    const collection = db.collection("robus_collection");
+    const db = client.db(DatabaseConfig.DATABASE_NAME);
+    const collection = db.collection(DatabaseConfig.COLLECTION_NAME);
 
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
 
@@ -65,8 +67,8 @@ export async function DELETE(
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const client = await clientPromise;
-    const db = client.db("robus_database");
-    const collection = db.collection("robus_collection");
+    const db = client.db(DatabaseConfig.DATABASE_NAME);
+    const collection = db.collection(DatabaseConfig.COLLECTION_NAME);
 
     const { id } = params;
     const updateData = await request.json();

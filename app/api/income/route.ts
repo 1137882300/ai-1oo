@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/lib/dbConnect';
 import { ObjectId ,Collection} from 'mongodb';
-
+import { DatabaseConfig } from '@/app/config/appConfig';
 // app/api/income/route.ts 处理 /api/income 的请求（如 GET 获取所有收入，POST 创建新收入）。
 // 获取所有收入记录
 export async function GET(request: NextRequest) {
@@ -11,8 +11,8 @@ export async function GET(request: NextRequest) {
     const action = searchParams.get('action');
 
     const client = await clientPromise;
-    const db = client.db("robus_database");
-    const collection = db.collection("robus_collection");
+    const db = client.db(DatabaseConfig.DATABASE_NAME);
+    const collection = db.collection(DatabaseConfig.COLLECTION_NAME);
 
     switch (action) {
       case 'statistics':
@@ -98,32 +98,6 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: '创建收入记录失败' }, { status: 500 });
-  }
-}
-
-// 更新收入记录
-export async function PUT(request: Request) {
-  try {
-    const client = await clientPromise;
-    const db = client.db("robus_database");
-    const collection = db.collection("robus_collection");
-
-    const body = await request.json();
-    const { id, ...updateData } = body;
-
-    const result = await collection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: updateData }
-    );
-
-    if (result.matchedCount === 0) {
-      return NextResponse.json({ error: '未找到该收入记录' }, { status: 404 });
-    }
-
-    return NextResponse.json({ message: '更新成功' });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: '更新收入记录失败' }, { status: 500 });
   }
 }
 
