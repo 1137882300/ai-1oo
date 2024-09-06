@@ -44,15 +44,21 @@ async function handleStatistics(searchParams: URLSearchParams, collection: Colle
 }
 
 async function handleList(searchParams: URLSearchParams, collection: Collection) {
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '10');
-  const skip = (page - 1) * limit;
+  const searchTerm = searchParams.get('search');
+  const userId = searchParams.get('userId');
 
-  const list = await collection.find({})
-    .skip(skip)
-    .limit(limit)
-    .toArray();
+  let query: any = {};
+  if (searchTerm) {
+    query.$or = [
+      { note: { $regex: searchTerm, $options: 'i' } },
+      { userId: { $regex: searchTerm, $options: 'i' } }
+    ];
+  }
+  if (userId) {
+    query.userId = userId;
+  }
 
+  const list = await collection.find(query).toArray();
   return NextResponse.json(list);
 }
 

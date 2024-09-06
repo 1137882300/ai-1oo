@@ -43,6 +43,7 @@ export default function IncomePage() {
   const [incomes, setIncomes] = useState<Income[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedUserId, setSelectedUserId] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<Partial<Income>>({});
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
@@ -61,7 +62,7 @@ export default function IncomePage() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchIncomes(searchTerm);
+        const data = await fetchIncomes(searchTerm, selectedUserId);
         setIncomes(data);
       } catch (error) {
         console.error('获取收入列表时出错:', error);
@@ -72,7 +73,7 @@ export default function IncomePage() {
 
     fetchData();
     //当搜索词变化时重新获取数据。[searchTerm] 是依赖数组
-  }, [searchTerm]);
+  }, [searchTerm, selectedUserId]);
 
   const handleDeleteIncome = async (id: string) => {
     if (!id) {
@@ -93,13 +94,13 @@ export default function IncomePage() {
   //通过 useCallback 优化性能，避免在每次渲染时重新创建函数。
   const refreshIncomes = useCallback(async () => {
     try {
-      const data = await fetchIncomes(searchTerm);
+      const data = await fetchIncomes(searchTerm, selectedUserId);
       setIncomes(data);
     } catch (error) {
       console.error('获取收入列表时出错:', error);
       // 可以在这里添加错误处理逻辑，比如显示错误消息
     }
-  }, [searchTerm]);
+  }, [searchTerm, selectedUserId]);
 
   const filteredIncomes = incomes.filter(income =>
     income.description
@@ -158,17 +159,36 @@ export default function IncomePage() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">收入列表</h1>
       <div className="flex justify-between mb-4">
-        <div className="flex">
+        <div className="flex space-x-2">
           <input
             type="text"
             placeholder="搜索..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="border p-2 rounded-l"
+            className="border p-2 rounded"
           />
+          <select
+            value={selectedUserId}
+            onChange={(e) => setSelectedUserId(e.target.value)}
+            className="border p-2 rounded"
+          >
+            <option value="">所有用户</option>
+            {staticUsers.map(user => (
+              <option key={user.id} value={user.id}>{user.name}</option>
+            ))}
+          </select>
           <button
-            onClick={refreshIncomes}
-            className="bg-green-500 text-white px-4 py-2 rounded-r transition duration-150 ease-in-out active:bg-green-600 active:transform active:scale-95"
+            onClick={() => {
+              setSearchTerm('');
+              setSelectedUserId('');
+            }}
+            className="bg-gray-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out active:bg-gray-600 active:transform active:scale-95"
+          >
+            重置
+          </button>
+          <button
+            onClick={() => fetchIncomes(searchTerm, selectedUserId)}
+            className="bg-green-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out active:bg-green-600 active:transform active:scale-95"
           >
             查询
           </button>

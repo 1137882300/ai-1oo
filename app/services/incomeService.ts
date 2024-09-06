@@ -12,11 +12,14 @@ export async function deleteIncome(id: string): Promise<void> {
 }
   
   // 获取收入列表
-  export async function fetchIncomes(searchTerm?: string): Promise<any[]> {
+  export async function fetchIncomes(searchTerm?: string, userId?: string): Promise<any[]> {
     const params = new URLSearchParams();
     params.append('action', 'list'); // 添加 action 参数
     if (searchTerm) {
       params.append('search', searchTerm);
+    }
+    if (userId) {
+      params.append('userId', userId);
     }
     const response = await fetch(`/api/income?${params.toString()}`);
     if (!response.ok) {
