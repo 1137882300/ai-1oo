@@ -4,6 +4,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { fetchIncomes, deleteIncome, addIncome, fetchIncomeById, updateIncome } from '../services/incomeService';
 import Link from 'next/link';
 import { Income , columnDisplayNames} from "@/types";
+import { exportIncomesToWord } from '@/app/services/exportToWord';
+
 
 interface User {
   id: string;
@@ -140,6 +142,15 @@ export default function IncomePage() {
     handleSearch(1);
   }, [handleSearch]);
 
+  const handleExportToWord = useCallback(async () => {
+    try {
+      await exportIncomesToWord(incomes);
+    } catch (error) {
+      console.error('导出Word文档时出错:', error);
+      // 这里可以添加一些用户反馈，比如显示一个错误提示
+    }
+  }, [incomes]);
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">收入列表</h1>
@@ -181,6 +192,11 @@ export default function IncomePage() {
               统计
             </button>
           </Link>
+          <button
+          onClick={handleExportToWord}
+          className="bg-green-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out active:bg-green-600 active:transform active:scale-95"          >
+            导出为Word
+          </button>
           <button 
             onClick={() => setIsModalOpen(true)}
             className="bg-blue-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out hover:bg-blue-600 active:bg-blue-700 active:transform active:scale-95 w-24 h-full"
