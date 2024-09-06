@@ -3,34 +3,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { fetchIncomes, deleteIncome, addIncome, fetchIncomeById, updateIncome } from '../services/incomeService';
 import Link from 'next/link';
-
-interface Income {
-  _id: string;
-  userId: string;
-  date: string;
-  amount: number;
-  note: string | null;
-  bonus: number;
-  personalIncomeTax: number;
-  socialInsurance: number;
-  [key: string]: any;
-}
+import { Income , columnDisplayNames} from "@/types";
 
 interface User {
   id: string;
   name: string;
 }
 
-const columnDisplayNames: { [key: string]: string } = {
-  _id: 'ID',
-  userId: '用户ID',
-  date: '时间',
-  amount: '收入金额',
-  note: '备注',
-  bonus: '奖金',
-  personalIncomeTax: '个人所得税',
-  socialInsurance: '社会保险'
-};
 
 // 静态用户列表
 const staticUsers: User[] = [

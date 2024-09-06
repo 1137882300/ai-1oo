@@ -33,3 +33,14 @@ export interface Income {
   socialInsurance: number;
   [key: string]: any;
 }
+
+export const columnDisplayNames: { [key: string]: string } = {
+  _id: 'ID',
+  userId: '用户ID',
+  date: '时间',
+  amount: '收入金额',
+  note: '备注',
+  bonus: '奖金',
+  personalIncomeTax: '个人所得税',
+  socialInsurance: '社会保险'
+};
