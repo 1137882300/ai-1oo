@@ -14,6 +14,7 @@ export async function deleteIncome(id: string): Promise<void> {
   // 获取收入列表
   export async function fetchIncomes(searchTerm?: string): Promise<any[]> {
     const params = new URLSearchParams();
+    params.append('action', 'list'); // 添加 action 参数
     if (searchTerm) {
       params.append('search', searchTerm);
     }

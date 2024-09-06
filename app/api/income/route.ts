@@ -1,63 +1,74 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/lib/dbConnect';
-import { ObjectId } from 'mongodb';
+import { ObjectId ,Collection} from 'mongodb';
 
 // app/api/income/route.ts 处理 /api/income 的请求（如 GET 获取所有收入，POST 创建新收入）。
 // 获取所有收入记录
 export async function GET(request: NextRequest) {
-  console.log('GET function called', new Date().toISOString());
+  console.log('GET 函数被调用', new Date().toISOString());
   try {
     const { searchParams } = new URL(request.url);
-    const isStatistics = searchParams.get('statistics') === 'true';
+    const action = searchParams.get('action');
+
     const client = await clientPromise;
     const db = client.db("robus_database");
     const collection = db.collection("robus_collection");
 
-    if (isStatistics) {
-      const timeFrame = searchParams.get('timeFrame');
-      const selectedUser = searchParams.get('selectedUser');
-
-      console.log('Query params:', { timeFrame, selectedUser });
-
-      let query: any = {};
-      if (selectedUser && selectedUser !== 'all') {
-        query.userId = selectedUser;
-      }
-
-      if (timeFrame === 'week') {
-        query.date = { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] };
-      } else if (timeFrame === 'month') {
-        query.date = { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] };
-      } else if (timeFrame === 'year') {
-        query.date = { $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] };
-      }
-
-      console.log('MongoDB query:', JSON.stringify(query));
-
-      const statistics = await collection.aggregate([
-        { $match: query },
-        { $group: {
-          _id: "$date",
-          totalAmount: { $sum: "$amount" },
-          totalBonus: { $sum: "$bonus" },
-          totalTax: { $sum: "$personalIncomeTax" },
-          totalInsurance: { $sum: "$socialInsurance" }
-        }},
-        { $sort: { _id: 1 } }
-      ]).toArray();
-
-      console.log('Statistics result:', JSON.stringify(statistics));
-
-      return NextResponse.json(statistics);
+    switch (action) {
+      case 'statistics':
+        return await handleStatistics(searchParams, collection);
+      case 'list':
+        return await handleList(searchParams, collection);
+      case 'detail':
+        return await handleDetail(searchParams, collection);
+      default:
+        return NextResponse.json({ error: '无效的操作' }, { status: 400 });
     }
-
-    // 处理其他 GET 请求（如获取收入列表）
-    // ...
-
   } catch (error: unknown) {
-    console.error('Error in GET /api/income:', error);
+    console.error('GET /api/income 错误:', error);
     return NextResponse.json({ error: '获取数据失败', details: (error as Error).message }, { status: 500 });
   }
+}
+
+async function handleStatistics(searchParams: URLSearchParams, collection: Collection) {
+  const timeFrame = searchParams.get('timeFrame');
+  const selectedUser = searchParams.get('selectedUser');
+  // 实现统计逻辑
+  const statistics = {
+    // 在这里添加您的统计数据
+    timeFrame,
+    selectedUser,
+    // 其他统计信息...
+  };
+  return NextResponse.json(statistics);
+}
+
+async function handleList(searchParams: URLSearchParams, collection: Collection) {
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '10');
+  const skip = (page - 1) * limit;
+
+  const list = await collection.find({})
+    .skip(skip)
+    .limit(limit)
+    .toArray();
+
+  return NextResponse.json(list);
+}
+
+async function handleDetail(searchParams: URLSearchParams, collection: Collection) {
+  const id = searchParams.get('id');
+  if (!id) {
+    return NextResponse.json({ error: '缺少ID参数' }, { status: 400 });
+  }
+  
+  const detail = await collection.findOne({ _id: new ObjectId(id) });
+  
+  if (!detail) {
+    return NextResponse.json({ error: '未找到记录' }, { status: 404 });
+  }
+  
+  return NextResponse.json(detail);
 }
 
 // 创建新的收入记录
