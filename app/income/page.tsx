@@ -65,7 +65,7 @@ export default function IncomePage() {
     } finally {
       setIsLoading(false);
     }
-  }, [searchTerm, selectedUserId]);
+  }, [searchTerm, selectedUserId, pageSize]);
 
   const handleReset = () => {
     setSearchTerm('');
@@ -141,7 +141,7 @@ export default function IncomePage() {
       setIsDetailModalOpen(true);
     } catch (error) {
       console.error('获取收入详情时出错:', error);
-      // 这里可以添加错误处理逻辑，比如显示错误消息
+      // 这里可以添加错误处理逻辑��比如显示错误消息
     }
   };
 
@@ -159,7 +159,7 @@ export default function IncomePage() {
 
   useEffect(() => {
     handleSearch(1);
-  }, []);
+  }, [handleSearch]);
 
   return (
     <div className="container mx-auto p-4">
