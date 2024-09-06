@@ -12,15 +12,23 @@ export async function deleteIncome(id: string): Promise<void> {
 }
   
   // 获取收入列表
-  export async function fetchIncomes(searchTerm?: string, userId?: string): Promise<any[]> {
+  export async function fetchIncomes(
+    searchTerm?: string, 
+    userId?: string, 
+    page: number = 1, 
+    pageSize: number = 15
+  ): Promise<{ data: any[], total: number }> {
     const params = new URLSearchParams();
-    params.append('action', 'list'); // 添加 action 参数
+    params.append('action', 'list');
     if (searchTerm) {
       params.append('search', searchTerm);
     }
     if (userId) {
       params.append('userId', userId);
     }
+    params.append('page', page.toString());
+    params.append('pageSize', pageSize.toString());
+
     const response = await fetch(`/api/income?${params.toString()}`);
     if (!response.ok) {
       throw new Error('获取收入列表失败');

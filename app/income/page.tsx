@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { fetchIncomes, deleteIncome, addIncome } from '../services/incomeService';
 import Link from 'next/link';
 
@@ -48,12 +48,17 @@ export default function IncomePage() {
   const [formData, setFormData] = useState<Partial<Income>>({});
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 3;
 
-  const handleSearch = useCallback(async () => {
+  const handleSearch = useCallback(async (page: number = 1) => {
     setIsLoading(true);
     try {
-      const data = await fetchIncomes(searchTerm, selectedUserId);
+      const { data, total } = await fetchIncomes(searchTerm, selectedUserId, page, pageSize);
       setIncomes(data);
+      setTotalPages(Math.ceil(total / pageSize));
+      setCurrentPage(page);
     } catch (error) {
       console.error('获取收入列表时出错:', error);
     } finally {
@@ -64,7 +69,7 @@ export default function IncomePage() {
   const handleReset = () => {
     setSearchTerm('');
     setSelectedUserId('');
-    handleSearch();
+    handleSearch(1);
   };
 
   //用于动态生成表格的列头或表单字段。
@@ -134,6 +139,10 @@ export default function IncomePage() {
     }
   };
 
+  useEffect(() => {
+    handleSearch(1);
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">收入列表</h1>
@@ -163,7 +172,7 @@ export default function IncomePage() {
             重置
           </button>
           <button
-            onClick={handleSearch}
+            onClick={() => handleSearch(currentPage)}
             className="bg-green-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out active:bg-green-600 active:transform active:scale-95"
           >
             查询
@@ -186,43 +195,64 @@ export default function IncomePage() {
       {isLoading ? (
         <div className="text-center">加载中...</div>
       ) : (
-        <table className="w-full border-collapse border">
-          <thead>
-            <tr className="bg-gray-200">
-              {getIncomeKeys().map(key => (
-                <th key={key} className="border p-2">
-                  {columnDisplayNames[key]}
-                </th>
-              ))}
-              <th className="border p-2">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            {incomes.map(income => (
-              <tr key={income._id}>
+        <>
+          <table className="w-full border-collapse border">
+            <thead>
+              <tr className="bg-gray-200">
                 {getIncomeKeys().map(key => (
-                  <td key={key} className="border p-2">
-                    {formatValue(income[key])}
-                  </td>
+                  <th key={key} className="border p-2">
+                    {columnDisplayNames[key]}
+                  </th>
                 ))}
-                <td className="border p-2">
-                  <button
-                    onClick={() => handleViewDetails(income._id)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
-                  >
-                    查看详情
-                  </button>
-                  <button
-                    onClick={() => handleDeleteIncome(income._id)}
-                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
-                  >
-                    删除
-                  </button>
-                </td>
+                <th className="border p-2">操作</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {incomes.map(income => (
+                <tr key={income._id}>
+                  {getIncomeKeys().map(key => (
+                    <td key={key} className="border p-2">
+                      {formatValue(income[key])}
+                    </td>
+                  ))}
+                  <td className="border p-2">
+                    <button
+                      onClick={() => handleViewDetails(income._id)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2"
+                    >
+                      查看详情
+                    </button>
+                    <button
+                      onClick={() => handleDeleteIncome(income._id)}
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+                    >
+                      删除
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="mt-4 flex justify-center items-center space-x-2">
+            <button
+              onClick={() => handleSearch(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+            >
+              上一页
+            </button>
+            <span className="text-gray-700">
+              第 {currentPage} 页 / 共 {totalPages} 页
+            </span>
+            <button
+              onClick={() => handleSearch(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+            >
+              下一页
+            </button>
+          </div>
+        </>
       )}
 
       {/* 详情弹窗 */}

@@ -46,6 +46,8 @@ async function handleStatistics(searchParams: URLSearchParams, collection: Colle
 async function handleList(searchParams: URLSearchParams, collection: Collection) {
   const searchTerm = searchParams.get('search');
   const userId = searchParams.get('userId');
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const pageSize = parseInt(searchParams.get('pageSize') || '15', 10);
 
   let query: any = {};
   if (searchTerm) {
@@ -58,8 +60,13 @@ async function handleList(searchParams: URLSearchParams, collection: Collection)
     query.userId = userId;
   }
 
-  const list = await collection.find(query).toArray();
-  return NextResponse.json(list);
+  const total = await collection.countDocuments(query);
+  const list = await collection.find(query)
+    .skip((page - 1) * pageSize)
+    .limit(pageSize)
+    .toArray();
+
+  return NextResponse.json({ data: list, total });
 }
 
 async function handleDetail(searchParams: URLSearchParams, collection: Collection) {
