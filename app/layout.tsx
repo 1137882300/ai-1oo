@@ -6,7 +6,8 @@ import Footer from './components/Footer';
 const navItems = [
   { name: 'Home', href: '/' },
   { name: 'Claude Artifacts', href: '/claude-artifacts', isNew: true },
-  { name: 'Income', href: '/income' },
+  // { name: 'Income', href: '/income' },
+  { name: 'upload', href: '/upload-file'},
   { name: 'Books', href: '/books'  },
 ];
 
