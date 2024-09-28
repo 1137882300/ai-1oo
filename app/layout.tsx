@@ -8,7 +8,7 @@ const navItems = [
   { name: 'Claude Artifacts', href: '/claude-artifacts', isNew: true },
   // { name: 'Income', href: '/income' },
   { name: 'upload', href: '/upload-file'},
-  { name: 'Books', href: '/books'  },
+  { name: 'recipe', href: '/recipe'  },
 ];
 
 export const metadata: Metadata = {
