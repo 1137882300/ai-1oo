@@ -37,6 +37,7 @@ export const categories: Category[] = [
     items: [
       { name: "ChatGPT", link: "https://chat.openai.com/" , isNew: true},
       { name: "V0dev",   link: "https://v0.dev/chat" , isNew: true},
+      { name: "Github Models", link: "https://github.com/marketplace", isNew: true},
       { name: "Microsoft Copilot", link: "https://copilot.microsoft.com/" },
       { name: "Claude", link: "https://www.anthropic.com/" , isNew: true},
       { name: "Gemini", link: "https://gemini.google.com/" },
@@ -62,6 +63,7 @@ export const categories: Category[] = [
       { name: "Zhidouai",link: "https://www.zhidouai.com/" },
       { name: "360AI",link: "https://bot.360.com" },
       { name: "Dell-3",link: "https://www.bing.com/images/create" },
+      { name: "OpenAI01.net", link: "https://openai01.net/zh?ref=2rLejpQD"},
     ]
   },
   {
