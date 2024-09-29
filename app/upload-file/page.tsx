@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { Upload, Link, Plus, Trash2, X } from 'lucide-react'
+import { Upload, Link, Plus, Trash2, X, Copy } from 'lucide-react'
 
 async function uploadFiles(files: File[]): Promise<string[]> {
   const uploadedFiles: string[] = []
@@ -24,7 +24,7 @@ async function uploadFiles(files: File[]): Promise<string[]> {
 
       const result = await response.json()
       if (Array.isArray(result) && result.length > 0 && result[0].src) {
-        const fileUrl = `https://im.gurl.eu.org${result[0].src}`
+        const fileUrl = `https://img.crab6688.cloudns.org${result[0].src}`
         uploadedFiles.push(fileUrl)
       } else {
         throw new Error('无效的响应格式')
@@ -63,6 +63,8 @@ export default function UploadFilePage() {
   const [urls, setUrls] = useState<string[]>([''])
   const [status, setStatus] = useState<string>('')
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
+
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -125,6 +127,16 @@ export default function UploadFilePage() {
       return false
     }
   }
+
+  const copyToClipboard = useCallback((text: string, index: number) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 2000); // 2秒后重置
+      console.log('已复制到剪贴板');
+    }).catch(err => {
+      console.error('复制失败:', err);
+    });
+  }, []);
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
@@ -256,10 +268,21 @@ export default function UploadFilePage() {
           {uploadedFiles.length > 0 && (
             <ul className="mt-2 space-y-2">
               {uploadedFiles.map((file, index) => (
-                <li key={index} className="text-sm text-gray-600">
-                  <a href={file} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                    {file.split('/').pop()}
+                <li key={index} className="flex items-center justify-between text-sm text-gray-600 break-all">
+                  <a href={file} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline mr-2">
+                    {file}
                   </a>
+                  <button
+                    onClick={() => copyToClipboard(file, index)}
+                    className={`p-1 rounded-md transition duration-150 ease-in-out ${
+                      copiedIndex === index
+                        ? 'bg-green-500 text-white'
+                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200 active:bg-gray-300'
+                    }`}
+                    title={copiedIndex === index ? "已复制" : "复制链接"}
+                  >
+                    <Copy className="w-4 h-4" />
+                  </button>
                 </li>
               ))}
             </ul>
