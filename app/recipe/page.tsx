@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState } from 'react';
 
 // 扩展的菜谱数据库
 const recipeDatabase = [
@@ -38,88 +38,130 @@ interface Recipe {
 }
 
 export default function RecipePage() {
-  const [recipes, setRecipes] = useState<Recipe[]>([])
-  const [customRecipe, setCustomRecipe] = useState("")
-  const [meatDishCount, setMeatDishCount] = useState(1)
-  const [vegDishCount, setVegDishCount] = useState(1)
+  const [recipe, setRecipe] = useState({
+    name: '',
+    ingredients: '',
+    instructions: '',
+  });
+  const [aiGeneratedRecipe, setAiGeneratedRecipe] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const generateRandomRecipes = () => {
-    const meatDishes = recipeDatabase.filter(recipe => recipe.type === "荤")
-    const vegDishes = recipeDatabase.filter(recipe => recipe.type === "素")
-    
-    const selectedMeatDishes = getRandomRecipes(meatDishes, meatDishCount)
-    const selectedVegDishes = getRandomRecipes(vegDishes, vegDishCount)
-    
-    setRecipes([...selectedMeatDishes, ...selectedVegDishes])
-  }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setRecipe(prev => ({ ...prev, [name]: value }));
+  };
 
-  const getRandomRecipes = (dishes: Recipe[], count: number) => {
-    const shuffled = [...dishes].sort(() => 0.5 - Math.random())
-    return shuffled.slice(0, count)
-  }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('提交的菜谱:', recipe);
+    // 这里可以添加提交菜谱到后端的逻辑
+  };
 
-  const handleCustomRecipe = (e: React.FormEvent) => {
-    e.preventDefault()
-    setRecipes([...recipes, { name: customRecipe, ingredients: ["请自行添加所需食材"], method: "请自行添加烹饪方法", type: "自定义" }])
-    setCustomRecipe("")
-  }
+  const generateAIRecipe = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          modelKey: 'cloudflare',
+          messages: [
+            {
+              role: 'system',
+              content: '你是一个专业的厨师，擅长创造美味的菜谱。',
+            },
+            {
+              role: 'user',
+              content: '请生成一个随机的菜谱，包括菜名、原料和烹饪步骤。',
+            },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('AI 请求失败');
+      }
+
+      const result = await response.json();
+      setAiGeneratedRecipe(result.response);
+    } catch (error) {
+      console.error('AI 生成菜谱错误:', error);
+      setAiGeneratedRecipe('生成菜谱时出错，请稍后再试。');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">增强版随机菜谱生成器</h1>
+    <div className="container mx-auto p-4 max-w-2xl">
+      <h1 className="text-2xl font-bold mb-4 text-center">创建新菜谱</h1>
       
-      <div className="grid gap-4 mb-4">
-        <div className="flex gap-2">
-          <label htmlFor="meatCount" className="flex items-center">荤菜数量:</label>
-          <input 
-            id="meatCount"
-            type="number" 
-            min="0"
-            value={meatDishCount} 
-            onChange={(e) => setMeatDishCount(parseInt(e.target.value))}
-            className="w-20 border rounded px-2 py-1"
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">菜名</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={recipe.name}
+            onChange={handleInputChange}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           />
-          <label htmlFor="vegCount" className="flex items-center">素菜数量:</label>
-          <input 
-            id="vegCount"
-            type="number" 
-            min="0"
-            value={vegDishCount} 
-            onChange={(e) => setVegDishCount(parseInt(e.target.value))}
-            className="w-20 border rounded px-2 py-1"
-          />
-          <button onClick={generateRandomRecipes} className="bg-blue-500 text-white px-4 py-2 rounded">随机生成菜谱</button>
         </div>
         
-        <form onSubmit={handleCustomRecipe} className="flex gap-2">
-          <input 
-            type="text" 
-            value={customRecipe} 
-            onChange={(e) => setCustomRecipe(e.target.value)}
-            placeholder="输入自定义菜谱名称"
-            className="flex-grow border rounded px-2 py-1"
+        <div>
+          <label htmlFor="ingredients" className="block text-sm font-medium text-gray-700">原料</label>
+          <textarea
+            id="ingredients"
+            name="ingredients"
+            value={recipe.ingredients}
+            onChange={handleInputChange}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            rows={3}
           />
-          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">添加自定义菜谱</button>
-        </form>
+        </div>
+        
+        <div>
+          <label htmlFor="instructions" className="block text-sm font-medium text-gray-700">烹饪步骤</label>
+          <textarea
+            id="instructions"
+            name="instructions"
+            value={recipe.instructions}
+            onChange={handleInputChange}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            rows={5}
+          />
+        </div>
+        
+        <button
+          type="submit"
+          className="w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          保存菜谱
+        </button>
+      </form>
+
+      <div className="mt-8">
+        <button 
+          onClick={generateAIRecipe} 
+          className="w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          disabled={isLoading}
+        >
+          {isLoading ? '生成中...' : '使用 AI 生成菜谱'}
+        </button>
       </div>
 
-      {recipes.map((recipe, index) => (
-        <div key={index} className="mb-4 border rounded p-4">
-          <h2 className="text-xl font-bold">{recipe.name} ({recipe.type})</h2>
-          <div>
-            <h3 className="font-bold mt-2">所需食材</h3>
-            <ul className="list-disc list-inside">
-              {recipe.ingredients.map((ingredient, idx) => (
-                <li key={idx}>{ingredient}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-bold mt-2">详细做法</h3>
-            <p className="whitespace-pre-line">{recipe.method}</p>
-          </div>
+      {aiGeneratedRecipe && (
+        <div className="mt-4 p-4 bg-gray-100 rounded-md">
+          <h2 className="text-lg font-semibold mb-2">AI 生成的菜谱：</h2>
+          <pre className="whitespace-pre-wrap text-sm">{aiGeneratedRecipe}</pre>
         </div>
-      ))}
+      )}
     </div>
-  )
+  );
 }

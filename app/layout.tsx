@@ -9,6 +9,7 @@ const navItems = [
   // { name: 'Income', href: '/income' },
   { name: 'upload', href: '/upload-file'},
   { name: 'recipe', href: '/recipe'  },
+  { name: 'chat', href: '/chat'  },
 ];
 
 export const metadata: Metadata = {

@@ -66,6 +66,8 @@ export default function UploadFilePage() {
 
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
+  const [aiResponse, setAiResponse] = useState<string>('');
+
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files)
@@ -137,6 +139,40 @@ export default function UploadFilePage() {
       console.error('复制失败:', err);
     });
   }, []);
+
+  const handleAIRequest = async () => {
+    try {
+      const response = await fetch('/api/ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          modelKey: 'cloudflare',
+          messages: [
+            {
+              role: 'system',
+              content: '你是一个友好的助手，帮助写故事。',
+            },
+            {
+              role: 'user',
+              content: '写一个短故事，关于一只羊驼去寻找橙色云朵的旅程。',
+            },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('AI 请求失败');
+      }
+
+      const result = await response.json();
+      setAiResponse(result.response);
+    } catch (error) {
+      console.error('AI 请求错误:', error);
+      setAiResponse('处理 AI 请求时出错');
+    }
+  };
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
