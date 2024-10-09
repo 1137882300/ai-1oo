@@ -2,6 +2,18 @@ import { Category , NewlyAddedItem} from '../types';
 
 export const categories: Category[] = [
   {
+    title: "AI Code Generation",
+    icon: "💻",
+    items: [
+      { name: "bolt.new",  link: "https://bolt.new/" , isNew: true},
+      { name: "V0dev",   link: "https://v0.dev/chat" , isNew: true},
+      { name: "Cursor",  link: "https://cursor.sh/" , isNew: true},
+      { name: "Codex",   link: "https://github.com/facebook/codemod" },
+      { name: "GitHub Copilot", link: "https://github.com/features/copilot" },
+      { name: "Kodezi",  link: "https://kodezi.com/" },
+    ]
+  },
+  {
     title: "Vector Databases",
     icon: "🗄️",
     items: [
@@ -36,7 +48,6 @@ export const categories: Category[] = [
     icon: "🤖",
     items: [
       { name: "ChatGPT", link: "https://chat.openai.com/" , isNew: true},
-      { name: "V0dev",   link: "https://v0.dev/chat" , isNew: true},
       { name: "Github Models", link: "https://github.com/marketplace", isNew: true},
       { name: "Microsoft Copilot", link: "https://copilot.microsoft.com/" },
       { name: "Claude", link: "https://www.anthropic.com/" , isNew: true},
