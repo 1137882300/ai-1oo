@@ -73,3 +73,5 @@ Next.js初始化应用，加载全局样式 globals.css。
 favicon.ico 和 public 目录中的静态资源在需要时会被服务。
 ```
 安装插件 GitLens
+
+https://github.com/airobus/ai-1oo.git
